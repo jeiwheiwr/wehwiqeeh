@@ -6,7 +6,7 @@ import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface ApAtricleContentMapper extends BaseMapper<ApArticleContent> {
+public interface ApArticleContentMapper extends BaseMapper<ApArticleContent> {
 
 
 }
