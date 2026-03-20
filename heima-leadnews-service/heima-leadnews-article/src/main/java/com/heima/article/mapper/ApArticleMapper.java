@@ -13,4 +13,6 @@ import java.util.List;
 @Mapper
 public interface ApArticleMapper extends BaseMapper<ApArticle> {
     public List<ApArticle> loadArticleList(@Param("dto") ArticleHomeDto dto,@Param("type") String type);
+
+
 }

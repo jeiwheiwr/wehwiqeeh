@@ -13,3 +13,4 @@ server:
   tomcat:
     uri-encoding: utf-8
 
+#未在nacos中配置阿里云的内容
