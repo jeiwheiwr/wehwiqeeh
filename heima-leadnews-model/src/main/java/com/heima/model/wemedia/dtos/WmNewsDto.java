@@ -54,5 +54,10 @@ public class WmNewsDto {
      */
     private List<String> images;
 
+    /**
+     * 是否上架 0下架 1上架
+     */
+    private Short enable;
+
 
 }

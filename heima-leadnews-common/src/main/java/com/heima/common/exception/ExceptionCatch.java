@@ -20,8 +20,7 @@ public class ExceptionCatch {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseResult exception(Exception e){
-        e.printStackTrace();
-        log.error("catch exception:{}",e.getMessage());
+        log.error("catch exception:{}", e.getMessage(), e);
 
         return ResponseResult.errorResult(AppHttpCodeEnum.SERVER_ERROR);
     }

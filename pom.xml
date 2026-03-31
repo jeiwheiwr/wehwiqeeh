@@ -17,6 +17,9 @@
         <module>heima-leadnews-gateway</module>
         <module>heima-leadnews-test</module>
         <module>heima-leadnews-basic</module>
+        <module>heima-leadnews-search</module>
+        <module>heima-leadnews-service/heima-leadnews-behavior</module>
+        <module>heima-leadnews-service/heima-leadnews-behavior</module>
 
     </modules>
 

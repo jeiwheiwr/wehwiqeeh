@@ -20,7 +20,7 @@ public class WmTokenInterceptor implements HandlerInterceptor {
             //把用户id存入threadlocal
             WmUser wmUser = new WmUser();
             wmUser.setId(Integer.valueOf(userId));
-            WmThreadLoc alUtil.setUser(wmUser);
+            WmThreadLocalUtil.setUser(wmUser);
             log.info("wmTokenFilter设置用户信息到threadlocal中");
 
         }

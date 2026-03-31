@@ -1,0 +1,17 @@
+# IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven / Gradle 编译
+target/
+build/
+.gradle/
+
+# 系统文件
+.DS_Store
+*.log
+
+# 其他
+*.class

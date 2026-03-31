@@ -22,7 +22,9 @@ import com.heima.utils.thread.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
+import com.heima.wemedia.service.WmNewsAutoScanService;
 import com.heima.wemedia.service.WmNewsService;
+import com.heima.wemedia.service.WmNewsTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +47,9 @@ import java.util.stream.Collectors;
 public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> implements WmNewsService {
     @Autowired
     private WmNewsMaterialMapper wmNewsMaterialMapper;
+
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
 
     @Override
     public ResponseResult findAll(WmNewsPageReqDto dto) {
@@ -96,6 +101,8 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
         return responseResult;
 
     }
+    @Autowired
+    private WmNewsTaskService wmNewsTaskService;
 
     @Override
     public ResponseResult submitNews(WmNewsDto dto) {
@@ -131,6 +138,10 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
 
         //4.不是草稿，保存文章封面图片与素材的关系，如果当前布局是自动，需要匹配封面图片
         saveRelativeInfoForCover(dto,wmNews,materials);
+
+        //审核文章
+       // wmNewsAutoScanService.autoScan(wmNews.getId());
+        wmNewsTaskService.addNewsToTask(wmNews.getId(),wmNews.getPublishTime());
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
@@ -249,6 +260,34 @@ public class WmNewsServiceImpl extends ServiceImpl<WmNewsMapper, WmNews> impleme
             wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId,wmNews.getId()));
             updateById(wmNews);
         }
+    }
+
+    /**
+     * 处理文章上下架逻辑
+     * @param dto
+     * @return
+     */
+    @Override
+    public ResponseResult downOrUp(WmNewsDto dto) {
+        if (dto.getId()==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        //查询文章
+        WmNews wmNews = getById(dto.getId());
+        if(wmNews==null){
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST);
+        }
+
+        //3.判断文章是否已发布
+            if(!wmNews.getStatus().equals(WmNews.Status.PUBLISHED.getCode())){
+                return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID,"文章未发布不能上下架");
+            }
+        //4.修改文章状态
+        if (dto.getEnable()!=null && dto.getEnable()> -1 && dto.getEnable()<2){
+            update(Wrappers.<WmNews>lambdaUpdate().set(WmNews::getEnable,dto.getEnable()).eq(WmNews::getId,dto.getId()));
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+
     }
 
 }

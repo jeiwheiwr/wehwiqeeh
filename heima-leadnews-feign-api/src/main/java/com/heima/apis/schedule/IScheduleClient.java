@@ -1,0 +1,39 @@
+package com.heima.apis.schedule;
+
+import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.schedule.dtos.Task;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+@FeignClient("heima-leadnews-schedule")
+public interface IScheduleClient {
+    /**
+     *
+     * 添加任务
+     * @param task 任务
+     * @return 任务id
+     */
+    @PostMapping("/api/v1/task/add")
+    public ResponseResult addTask(@RequestBody Task task);
+
+    /**
+     * 取消任务
+     * @param taskId 任务id
+     * @return 是否取消成功
+     */
+    @GetMapping("/api/v1/task/cancel/{taskId}")
+    public ResponseResult cancelTask(@PathVariable Long taskId);
+
+    /**
+     *按照类型和优先级来拉取任务
+     * @param type 任务类型
+     * @param priority 任务优先级
+     * @return 任务列表
+     */
+    @GetMapping("/api/v1/task/poll/{type}/{priority}")
+    public ResponseResult poll(@PathVariable int type, @PathVariable int priority);
+
+}

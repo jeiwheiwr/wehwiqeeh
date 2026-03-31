@@ -11,6 +11,10 @@
     <modules>
         <module>freemaker-demo</module>
         <module>minio-demo</module>
+        <module>test4j-demo</module>
+        <module>kafka-demo</module>
+        <module>es-init</module>
+        <module>mongo-demo</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
